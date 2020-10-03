@@ -6,11 +6,15 @@ var ts = require("gulp-typescript"); // TypeScript compiler.
 var td = require("gulp-typedoc"); // TypeDoc documentation generator.
 
 
-// Source file directory.
+// Source directory/files.
 const SRC_DIR = "./src";
+const SRC_FILES = SRC_DIR + "/**/*.ts";
 
 // Directory for output files.
 const DIST_DIR = "./dist";
+
+// Directory for generated documentation.
+const DOCS_DIR = "./docs";
 
 // Load TypeScript configuration file.
 var project = ts.createProject("tsconfig.json");
@@ -18,12 +22,12 @@ var project = ts.createProject("tsconfig.json");
 // Generate project documentation.
 gulp.task("docs", function() {
     return gulp
-        .src(["src/*.ts"])
+        .src([SRC_FILES])
         .pipe(td({
             name: "typescript-project-template", // TODO: Update according to project.
             theme: "default", // TODO: Change to "minimal" for single-page docs (nice for smaller projects).
             mode: "modules",
-            out: "./docs",
+            out: DOCS_DIR,
             externalPattern: "**/node_modules/**",
             excludeExternals: true
         }))
@@ -44,7 +48,7 @@ gulp.task("build", function () {
 
 // Watch task.
 gulp.task("watch", function () {
-  gulp.watch([SRC_DIR + "/**/*.ts"], gulp.series("build"));
+  gulp.watch([SRC_FILES], gulp.series("build"));
 });
 
 // Default gulp task.
